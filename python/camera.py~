@@ -1,0 +1,9 @@
+from cffi import FFI
+
+ffi = FFI()
+ffi.set_source('v4lcamera', """
+#include cv.h
+""", libraries=[])
+
+if __name__ == '__main__':
+    ffi.compile()'
