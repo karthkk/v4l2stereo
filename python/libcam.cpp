@@ -614,12 +614,12 @@ void Camera::toRGB(unsigned char * img)
 {
 	for(int x = 0; x < w2; x++) {
 		for(int y = 0; y < height; y++) {
-			int y0, u, v;
+			int y0, y1, u, v;
 
 			int i=(y*w2 + x)*4;
 			y0 = data[i];
 			u = data[i+1];
-			//y1 = data[i+2];
+			y1 = data[i+2];
 			v = data[i+3];
 
 			int r, g, b;
@@ -634,10 +634,26 @@ void Camera::toRGB(unsigned char * img)
 			if(g < 0) g = 0;
 			if(b < 0) b = 0;
 
-			i = (y*w2 + x)*3;
-			img[i] = (unsigned char)(b); //B
+			i = (y*width + 2*x)*3;
+			img[i] = (unsigned char)(r); //R
 			img[i+1] = (unsigned char)(g); //G
-			img[i+2] = (unsigned char)(r); //R
+			img[i+2] = (unsigned char)(b); //B
+
+			r = y1 + (1.370705 * (v-128));
+			g = y1 - (0.698001 * (v-128)) - (0.337633 * (u-128));
+			b = y1 + (1.732446 * (u-128));
+
+			if(r > 255) r = 255;
+			if(g > 255) g = 255;
+			if(b > 255) b = 255;
+			if(r < 0) r = 0;
+			if(g < 0) g = 0;
+			if(b < 0) b = 0;
+
+			img[i+3] = (unsigned char)(r); //R
+			img[i+4] = (unsigned char)(g); //G
+			img[i+5] = (unsigned char)(b); //B
+
 		}
 	}
 }
